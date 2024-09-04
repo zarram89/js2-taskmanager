@@ -11,4 +11,3 @@ render(new NewTaskButtonView(), siteHeaderElement);
 render(new FilterView(), siteMainElement);
 
 boardPresenter.init();
-
