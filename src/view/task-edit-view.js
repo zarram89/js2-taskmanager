@@ -19,8 +19,10 @@ const BLANK_TASK = {
 };
 
 function createTaskEditTemplate(data) {
+  const {color, description, dueDate, repeating} = data;
+
   return (
-    `<article class="card card--edit card--yellow card--repeat">
+    `<article class="card card--edit card--${color} card--repeat">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
@@ -34,7 +36,7 @@ function createTaskEditTemplate(data) {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
-              >This is example of task edit. You can set date and chose repeating days and color.</textarea>
+              >${description}</textarea>
             </label>
           </div>
           <div class="card__settings">
@@ -214,8 +216,12 @@ function createTaskEditTemplate(data) {
 }
 
 export default class TaskEditView {
+  constructor({task = BLANK_TASK}) {
+    this.task = task;
+  }
+
   getTemplate() {
-    return createTaskEditTemplate();
+    return createTaskEditTemplate(this.task);
   }
 
   getElement() {
