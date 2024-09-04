@@ -1,5 +1,6 @@
 import {createElement} from '../render.js';
-import { COLORS } from '../const.js';
+import {COLORS} from '../const.js';
+import {humanizeTaskDueDate, isTaskRepeating} from '../utils.js';
 
 const BLANK_TASK = {
   color: COLORS[0],
@@ -18,11 +19,38 @@ const BLANK_TASK = {
   isFavorite: false,
 };
 
+function createTaskEditDateTemplate(dueDate) {
+  return (
+    `<button class="card__date-deadline-toggle" type="button">
+      date: <span class="card__date-status">${dueDate !== null ? 'yes' : 'no'}</span>
+    </button>
+
+    ${dueDate !== null ? `<fieldset class="card__date-deadline">
+      <label class="card__input-deadline-wrap">
+        <input
+          class="card__date"
+          type="text"
+          placeholder=""
+          name="date"
+          value="${humanizeTaskDueDate(dueDate)}"
+        />
+      </label>
+    </fieldset>` : ''}
+  `
+  );
+}
+
 function createTaskEditTemplate(data) {
   const {color, description, dueDate, repeating} = data;
 
+  const dateTemplate = createTaskEditDateTemplate(dueDate);
+
+  const repeatingClassName = isTaskRepeating(repeating)
+    ? 'card--repeat'
+    : '';
+
   return (
-    `<article class="card card--edit card--${color} card--repeat">
+    `<article class="card card--edit card--${color} ${repeatingClassName}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
@@ -30,6 +58,7 @@ function createTaskEditTemplate(data) {
               <use xlink:href="#wave"></use>
             </svg>
           </div>
+
           <div class="card__textarea-wrap">
             <label>
               <textarea
@@ -39,26 +68,16 @@ function createTaskEditTemplate(data) {
               >${description}</textarea>
             </label>
           </div>
+
           <div class="card__settings">
             <div class="card__details">
               <div class="card__dates">
-                <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">yes</span>
-                </button>
-                <fieldset class="card__date-deadline">
-                  <label class="card__input-deadline-wrap">
-                    <input
-                      class="card__date"
-                      type="text"
-                      placeholder=""
-                      name="date"
-                      value="23 September"
-                    />
-                  </label>
-                </fieldset>
+                ${dateTemplate}
+
                 <button class="card__repeat-toggle" type="button">
                   repeat:<span class="card__repeat-status">yes</span>
                 </button>
+
                 <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
                     <input
@@ -138,6 +157,7 @@ function createTaskEditTemplate(data) {
                 </fieldset>
               </div>
             </div>
+
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
@@ -205,6 +225,7 @@ function createTaskEditTemplate(data) {
               </div>
             </div>
           </div>
+
           <div class="card__status-btns">
             <button class="card__save" type="submit">save</button>
             <button class="card__delete" type="button">delete</button>
