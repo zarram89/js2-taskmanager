@@ -10,7 +10,7 @@ function createTaskTemplate(task) {
     ? 'card--deadline'
     : '';
 
-  const repeatClassName = isTaskExpired(dueDate)
+  const repeatClassName = isTaskRepeating(repeating)
     ? 'card--repeat'
     : '';
 

@@ -1,6 +1,24 @@
 import {createElement} from '../render.js';
+import { COLORS } from '../const.js';
 
-function createTaskEditTemplate() {
+const BLANK_TASK = {
+  color: COLORS[0],
+  description: '',
+  dueDate: null,
+  repeating: {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false,
+  },
+  isArchive: false,
+  isFavorite: false,
+};
+
+function createTaskEditTemplate(data) {
   return (
     `<article class="card card--edit card--yellow card--repeat">
       <form class="card__form" method="get">
